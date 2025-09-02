@@ -40,34 +40,27 @@
 <!-- Dynamic Quote Section -->
 <div>
   <p id="quote">Loading...</p>
-  <p id="author"></p>
 </div>
   <button id="refresh-btn">Load New Quote</button>
   
 <script>
-  async function loadQuote() {
-    try {
-      const response = await fetch('https://api.quotable.io/random');
+  function fetchRandomQuote() {
+    fetch('https://api.quotable.io/random')
+        .then(response => response.json())
+        .then(data => {
+            const quote = data.content;
+            document.getElementById("quote").textContent = quote;
+        })
+        .catch(error => {
+            console.error('Error fetching quote:', error);
+        });
+}
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      document.getElementById("quote").textContent = data.content;
-      document.getElementById("author").textContent = `— ${data.author}`;
-    } catch (error) {
-      document.getElementById("quote").textContent = "Failed to load quote.";
-      document.getElementById("author").textContent = "";
-      console.error("Error fetching quote:", error);
-    }
-  }
-
-  // Load a quote on initial page load
-  loadQuote();
+  // Initial quote display
+  fetchRandomQuote();
 
   // Add event listener to the button
-  document.getElementById("refresh-btn").addEventListener("click", loadQuote);
+  document.getElementById("refresh-btn").addEventListener("click", fetchRandomQuote);
 </script>
   
 </section>
