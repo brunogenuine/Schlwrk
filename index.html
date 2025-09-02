@@ -39,11 +39,27 @@
   </video>
   
   <!-- Dynamic Quote Section -->
-<div id="quote-box" style="max-width: 500px; padding: 1em; border: 1px solid #ccc; border-radius: 8px; background: #f9f9f9; font-family: sans-serif;">
-  <blockquote id="quote-text" style="font-size: 1.2em; margin: 0;"></blockquote>
-  <p id="quote-author" style="text-align: right; margin-top: 0.5em; font-style: italic;"></p>
-  <button onclick="getRandomQuote()" style="margin-top: 1em; padding: 0.5em 1em;">New Quote</button>
+<div id="quote-box" style="padding: 1em; border: 1px solid #ccc; border-radius: 8px; max-width: 400px; font-family: sans-serif;">
+  <blockquote id="quote" style="font-style: italic; margin: 0 0 1em 0;">Loading quote...</blockquote>
+  <cite id="author" style="display: block; text-align: right; font-weight: bold;"></cite>
 </div>
+
+<script>
+  async function loadQuote() {
+    try {
+      const response = await fetch("https://api.quotable.io/random");
+      const data = await response.json();
+      document.getElementById("quote").textContent = `"${data.content}"`;
+      document.getElementById("author").textContent = `— ${data.author}`;
+    } catch (error) {
+      document.getElementById("quote").textContent = "Failed to load quote.";
+      console.error("Error fetching quote:", error);
+    }
+  }
+
+  // Load a quote as soon as the script runs
+  loadQuote();
+</script>
 </section>
 
 <!-- Section: Favorites -->
@@ -102,23 +118,6 @@
   <footer>
     &copy; 2025 Bruno Guilherme. All rights reserved.
   </footer>
-  
-<script>
-  async function getRandomQuote() {
-    try {
-      const res = await fetch('https://api.quotable.io/random');
-      const data = await res.json();
-      document.getElementById('quote-text').textContent = `"${data.content}"`;
-      document.getElementById('quote-author').textContent = `— ${data.author}`;
-    } catch (error) {
-      document.getElementById('quote-text').textContent = 'Failed to load quote.';
-      document.getElementById('quote-author').textContent = '';
-    }
-  }
-
-  // Load a quote when the page loads
-  getRandomQuote();
-</script>
   
 </body>
 </html>
