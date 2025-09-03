@@ -69,8 +69,12 @@
     // Add event listener to the button
     document.getElementById("refresh-btn").addEventListener("click", fetchRandomQuote);
   });
-</script>
   
+</script>
+  fetch('https://api.quotable.io/random')
+  .then(r => r.json())
+  .then(console.log)
+  .catch(console.error);
 </section>
 
 <!-- Section: Favorites -->
